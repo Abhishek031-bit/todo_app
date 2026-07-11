@@ -1,0 +1,51 @@
+// GENERATED CODE - DO NOT MODIFY BY HAND
+
+part of 'database_provider.dart';
+
+// **************************************************************************
+// RiverpodGenerator
+// **************************************************************************
+
+// GENERATED CODE - DO NOT MODIFY BY HAND
+// ignore_for_file: type=lint, type=warning
+
+@ProviderFor(database)
+final databaseProvider = DatabaseProvider._();
+
+final class DatabaseProvider
+    extends $FunctionalProvider<Database, Database, Database>
+    with $Provider<Database> {
+  DatabaseProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'databaseProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$databaseHash();
+
+  @$internal
+  @override
+  $ProviderElement<Database> $createElement($ProviderPointer pointer) =>
+      $ProviderElement(pointer);
+
+  @override
+  Database create(Ref ref) {
+    return database(ref);
+  }
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(Database value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<Database>(value),
+    );
+  }
+}
+
+String _$databaseHash() => r'5f30f1982e9fcf32d743a3e299fbc66992eab362';
