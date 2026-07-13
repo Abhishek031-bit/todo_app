@@ -19,7 +19,7 @@ class TodoNotifier extends _$TodoNotifier {
 
   Future<void> _listTodos() async {
     final result = await _service.getAllTodos();
-    state = result.map((e) => TodoModel.fromMap(e)).toList();
+    state = result.map((e) => TodoModel.fromJson(e)).toList();
   }
 
   Future<void> addTodo({

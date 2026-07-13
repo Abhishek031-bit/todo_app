@@ -6,7 +6,7 @@ class TodoService {
   const TodoService(this.db);
 
   Future<void> addTodo(TodoModel todo) async {
-    await db.insert('todos', todo.toMap());
+    await db.insert('todos', todo.toJson());
   }
 
   Future<List<Map<String, Object?>>> getAllTodos() async {
@@ -14,7 +14,7 @@ class TodoService {
   }
 
   Future<void> updateTodo(TodoModel todo) async {
-    await db.update('todos', todo.toMap(), where: 'id = ?', whereArgs: [todo.id]);
+    await db.update('todos', todo.toJson(), where: 'id = ?', whereArgs: [todo.id]);
   }
 
   Future<void> deleteTodo(int id) async {
