@@ -14,14 +14,17 @@ class HomeScreen extends HookWidget {
     return Scaffold(
       body: _pages[index.value],
       floatingActionButton: index.value == 0
-          ? FloatingActionButton(
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => const CreateTodo()),
-                );
-              },
-              child: const Icon(Icons.add),
+          ? Tooltip(
+              message: 'Create a new Todo',
+              child: FloatingActionButton(
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => const CreateTodo()),
+                  );
+                },
+                child: const Icon(Icons.add),
+              ),
             )
           : null,
       bottomNavigationBar: BottomNavigationBar(

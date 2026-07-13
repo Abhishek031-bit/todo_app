@@ -13,7 +13,7 @@ class TodoModel {
   final DateTime dueDate;
   final DateTime? reminderDate;
 
-  TodoModel({
+  const TodoModel({
     required this.id,
     required this.title,
     required this.description,
@@ -21,7 +21,7 @@ class TodoModel {
     required this.category,
     required this.priority,
     required this.dueDate,
-    required this.reminderDate,
+    this.reminderDate,
   });
 
   TodoModel copyWith({

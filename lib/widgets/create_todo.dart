@@ -25,6 +25,7 @@ class CreateTodo extends HookConsumerWidget {
       text: todo?.reminderDate == null ? '' : DateFormat('yMMMd').format(todo!.reminderDate!),
     );
     final key = useMemoized(() => GlobalKey<FormState>());
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Add New Todo'),
@@ -37,7 +38,7 @@ class CreateTodo extends HookConsumerWidget {
         ),
       ),
       body: Padding(
-        padding: const EdgeInsets.all(12.0),
+        padding: const .all(12.0),
         child: Form(
           key: key,
           child: Column(
@@ -54,9 +55,9 @@ class CreateTodo extends HookConsumerWidget {
                 },
                 decoration: const InputDecoration(
                   labelText: 'Title',
-                  border: OutlineInputBorder(borderRadius: BorderRadius.all(Radius.circular(10))),
+                  border: OutlineInputBorder(borderRadius: .all(.circular(10))),
                   errorBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.all(Radius.circular(10)),
+                    borderRadius: .all(.circular(10)),
                     borderSide: BorderSide(color: Colors.red),
                   ),
                   errorStyle: TextStyle(color: Colors.red),
@@ -73,9 +74,9 @@ class CreateTodo extends HookConsumerWidget {
                 },
                 decoration: const InputDecoration(
                   labelText: 'Description',
-                  border: OutlineInputBorder(borderRadius: BorderRadius.all(Radius.circular(10))),
+                  border: OutlineInputBorder(borderRadius: .all(.circular(10))),
                   errorBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.all(Radius.circular(10)),
+                    borderRadius: .all(.circular(10)),
                     borderSide: BorderSide(color: Colors.red),
                   ),
                   errorStyle: TextStyle(color: Colors.red),
@@ -84,7 +85,7 @@ class CreateTodo extends HookConsumerWidget {
               DropdownButtonFormField<Category>(
                 initialValue: .general,
                 decoration: const InputDecoration(
-                  border: OutlineInputBorder(borderRadius: BorderRadius.all(Radius.circular(10))),
+                  border: OutlineInputBorder(borderRadius: .all(.circular(10))),
                   labelText: 'Category',
                 ),
                 items: [
@@ -122,7 +123,7 @@ class CreateTodo extends HookConsumerWidget {
               DropdownButtonFormField<Priority>(
                 initialValue: .low,
                 decoration: const InputDecoration(
-                  border: OutlineInputBorder(borderRadius: BorderRadius.all(Radius.circular(10))),
+                  border: OutlineInputBorder(borderRadius: .all(.circular(10))),
                   labelText: 'Priority',
                 ),
                 items: [
@@ -173,11 +174,9 @@ class CreateTodo extends HookConsumerWidget {
                   dueDateController.text = DateFormat.yMMMd().format(date);
                 },
                 decoration: InputDecoration(
-                  border: const OutlineInputBorder(
-                    borderRadius: BorderRadius.all(Radius.circular(10)),
-                  ),
+                  border: const OutlineInputBorder(borderRadius: .all(.circular(10))),
                   errorBorder: const OutlineInputBorder(
-                    borderRadius: BorderRadius.all(Radius.circular(10)),
+                    borderRadius: .all(.circular(10)),
                     borderSide: BorderSide(color: Colors.red),
                   ),
                   errorStyle: const TextStyle(color: Colors.red),
@@ -202,9 +201,9 @@ class CreateTodo extends HookConsumerWidget {
                   reminderDateController.text = DateFormat.yMMMd().format(date);
                 },
                 decoration: const InputDecoration(
-                  border: OutlineInputBorder(borderRadius: BorderRadius.all(Radius.circular(10))),
+                  border: OutlineInputBorder(borderRadius: .all(.circular(10))),
                   errorBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.all(Radius.circular(10)),
+                    borderRadius: .all(.circular(10)),
                     borderSide: BorderSide(color: Colors.red),
                   ),
                   errorStyle: TextStyle(color: Colors.red),

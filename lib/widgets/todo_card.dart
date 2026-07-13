@@ -3,11 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:intl/intl.dart';
-import 'package:todo_app/models/enums.dart';
 import 'package:todo_app/models/todo_model.dart';
 import 'package:todo_app/providers/providers.dart';
+import 'package:todo_app/widgets/category_row.dart';
 import 'package:todo_app/widgets/create_todo.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:todo_app/widgets/priority_row.dart';
 
 class TodoCard extends HookConsumerWidget {
   const TodoCard({super.key, required this.todo});
@@ -19,8 +20,6 @@ class TodoCard extends HookConsumerWidget {
     if (!show && todo.isDone) return const SizedBox.shrink();
     final completed = useState(todo.isDone);
     final TextDecoration decoration = completed.value ? .lineThrough : .none;
-    final category = categoryRow(todo.category);
-    final priority = priorityRow(todo.priority);
     final key = useMemoized(() => ValueKey(todo.id));
     return Slidable(
       key: key,
@@ -80,9 +79,9 @@ class TodoCard extends HookConsumerWidget {
                   Row(
                     spacing: 3,
                     children: [
-                      category,
+                      CategoryRow(category: todo.category),
                       const SizedBox(width: 7),
-                      priority,
+                      PriorityRow(priority: todo.priority),
                       const SizedBox(width: 7),
                       const Icon(Icons.date_range_rounded),
                       Text(DateFormat.yMMMd().format(todo.dueDate)),
@@ -101,93 +100,11 @@ class TodoCard extends HookConsumerWidget {
                   ),
                 );
               },
-              icon: const Icon(Icons.update_rounded),
+              icon: const Tooltip(message: 'Update this todo', child: Icon(Icons.update_rounded)),
             ),
           ],
         ),
       ),
     );
-  }
-
-  Widget categoryRow(Category category) {
-    switch (category) {
-      case .general:
-        return const Row(
-          spacing: 3,
-          children: [
-            Icon(Icons.category, color: Colors.brown),
-            Text('General', style: TextStyle(color: Colors.brown)),
-          ],
-        );
-      case .work:
-        return const Row(
-          spacing: 3,
-          children: [
-            Icon(Icons.work, color: Colors.teal),
-            Text('Work', style: TextStyle(color: Colors.teal)),
-          ],
-        );
-      case .personal:
-        return const Row(
-          spacing: 3,
-          children: [
-            Icon(Icons.person, color: Colors.blue),
-            Text('Personal', style: TextStyle(color: Colors.blue)),
-          ],
-        );
-      case .finances:
-        return const Row(
-          spacing: 3,
-          children: [
-            Icon(Icons.monetization_on_outlined, color: Colors.green),
-            Text('Finances', style: TextStyle(color: Colors.green)),
-          ],
-        );
-      case .health:
-        return const Row(
-          spacing: 3,
-          children: [
-            Icon(Icons.health_and_safety, color: Colors.red),
-            Text('Health', style: TextStyle(color: Colors.red)),
-          ],
-        );
-    }
-  }
-
-  Widget priorityRow(Priority priority) {
-    switch (priority) {
-      case .high:
-        return const Row(
-          spacing: 3,
-          children: [
-            Icon(Icons.arrow_upward_rounded, color: Colors.yellow),
-            Text('High', style: TextStyle(color: Colors.yellow)),
-          ],
-        );
-      case .medium:
-        return const Row(
-          spacing: 3,
-          children: [
-            Icon(Icons.remove, color: Colors.blue),
-            Text('Medium', style: TextStyle(color: Colors.blue)),
-          ],
-        );
-      case .low:
-        return const Row(
-          spacing: 3,
-          children: [
-            Icon(Icons.arrow_downward_rounded, color: Colors.blueGrey),
-            Text('Low', style: TextStyle(color: Colors.blueGrey)),
-          ],
-        );
-      case .urgent:
-        return const Row(
-          spacing: 3,
-          children: [
-            Icon(Icons.priority_high, color: Colors.red),
-            Text('Urgent', style: TextStyle(color: Colors.red)),
-          ],
-        );
-    }
   }
 }
