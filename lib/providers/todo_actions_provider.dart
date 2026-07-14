@@ -1,7 +1,6 @@
 import 'package:drift/drift.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-import 'package:todo_app/database/app_database.dart';
-import 'package:todo_app/database/daos/todo_dao.dart';
+import 'package:todo_app/database/database.dart';
 import 'package:todo_app/models/enums.dart';
 
 import 'todo_dao_provider.dart';

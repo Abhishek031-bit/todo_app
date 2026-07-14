@@ -5,7 +5,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:drift/drift.dart' show Value;
 import 'package:todo_app/models/enums.dart';
-import 'package:todo_app/database/app_database.dart';
+import 'package:todo_app/database/database.dart';
 import 'package:todo_app/providers/providers.dart';
 
 class CreateTodo extends HookConsumerWidget {

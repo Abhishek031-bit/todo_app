@@ -3,12 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:intl/intl.dart';
-import 'package:todo_app/database/app_database.dart';
+import 'package:todo_app/database/database.dart';
 import 'package:todo_app/providers/providers.dart';
-import 'package:todo_app/widgets/category_row.dart';
-import 'package:todo_app/widgets/create_todo.dart';
+import 'package:todo_app/widgets/widgets.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
-import 'package:todo_app/widgets/priority_row.dart';
 
 class TodoCard extends HookConsumerWidget {
   const TodoCard({super.key, required this.todo});
