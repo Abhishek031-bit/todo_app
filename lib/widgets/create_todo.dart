@@ -3,14 +3,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:intl/intl.dart';
+import 'package:drift/drift.dart' show Value;
 import 'package:todo_app/models/enums.dart';
-import 'package:todo_app/models/todo_model.dart';
+import 'package:todo_app/database/app_database.dart';
 import 'package:todo_app/providers/providers.dart';
 
 class CreateTodo extends HookConsumerWidget {
   const CreateTodo({super.key, this.saveAction = .add, this.todo});
   final SaveAction saveAction;
-  final TodoModel? todo;
+  final Todo? todo;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -38,7 +39,7 @@ class CreateTodo extends HookConsumerWidget {
         ),
       ),
       body: Padding(
-        padding: const .all(12.0),
+        padding: const EdgeInsets.all(12.0),
         child: Form(
           key: key,
           child: Column(
@@ -55,9 +56,9 @@ class CreateTodo extends HookConsumerWidget {
                 },
                 decoration: const InputDecoration(
                   labelText: 'Title',
-                  border: OutlineInputBorder(borderRadius: .all(.circular(10))),
+                  border: OutlineInputBorder(borderRadius: BorderRadius.all(Radius.circular(10))),
                   errorBorder: OutlineInputBorder(
-                    borderRadius: .all(.circular(10)),
+                    borderRadius: BorderRadius.all(Radius.circular(10)),
                     borderSide: BorderSide(color: Colors.red),
                   ),
                   errorStyle: TextStyle(color: Colors.red),
@@ -74,42 +75,42 @@ class CreateTodo extends HookConsumerWidget {
                 },
                 decoration: const InputDecoration(
                   labelText: 'Description',
-                  border: OutlineInputBorder(borderRadius: .all(.circular(10))),
+                  border: OutlineInputBorder(borderRadius: BorderRadius.all(Radius.circular(10))),
                   errorBorder: OutlineInputBorder(
-                    borderRadius: .all(.circular(10)),
+                    borderRadius: BorderRadius.all(Radius.circular(10)),
                     borderSide: BorderSide(color: Colors.red),
                   ),
                   errorStyle: TextStyle(color: Colors.red),
                 ),
               ),
               DropdownButtonFormField<Category>(
-                initialValue: .general,
+                initialValue: category,
                 decoration: const InputDecoration(
-                  border: OutlineInputBorder(borderRadius: .all(.circular(10))),
+                  border: OutlineInputBorder(borderRadius: BorderRadius.all(Radius.circular(10))),
                   labelText: 'Category',
                 ),
                 items: [
                   const DropdownMenuItem(
-                    value: .general,
+                    value: Category.general,
                     child: Row(spacing: 10, children: [Icon(Icons.category), Text('General')]),
                   ),
                   const DropdownMenuItem(
-                    value: .work,
+                    value: Category.work,
                     child: Row(spacing: 10, children: [Icon(Icons.work), Text('Work')]),
                   ),
                   const DropdownMenuItem(
-                    value: .personal,
+                    value: Category.personal,
                     child: Row(spacing: 10, children: [Icon(Icons.person), Text('Personal')]),
                   ),
                   const DropdownMenuItem(
-                    value: .finances,
+                    value: Category.finances,
                     child: Row(
                       spacing: 10,
                       children: [Icon(Icons.monetization_on_outlined), Text('Finances')],
                     ),
                   ),
                   const DropdownMenuItem(
-                    value: .health,
+                    value: Category.health,
                     child: Row(
                       spacing: 10,
                       children: [Icon(Icons.health_and_safety), Text('Health')],
@@ -121,33 +122,32 @@ class CreateTodo extends HookConsumerWidget {
                 },
               ),
               DropdownButtonFormField<Priority>(
-                initialValue: .low,
+                initialValue: priority,
                 decoration: const InputDecoration(
-                  border: OutlineInputBorder(borderRadius: .all(.circular(10))),
+                  border: OutlineInputBorder(borderRadius: BorderRadius.all(Radius.circular(10))),
                   labelText: 'Priority',
                 ),
                 items: [
                   const DropdownMenuItem(
-                    value: .low,
+                    value: Priority.low,
                     child: Row(
                       spacing: 10,
                       children: [Icon(Icons.arrow_downward_rounded), Text('Low')],
                     ),
                   ),
                   const DropdownMenuItem(
-                    value: .medium,
+                    value: Priority.medium,
                     child: Row(spacing: 10, children: [Icon(Icons.remove), Text('Medium')]),
                   ),
                   const DropdownMenuItem(
-                    value: .high,
+                    value: Priority.high,
                     child: Row(
                       spacing: 10,
                       children: [Icon(Icons.arrow_upward_rounded), Text('High')],
                     ),
                   ),
-
                   const DropdownMenuItem(
-                    value: .urgent,
+                    value: Priority.urgent,
                     child: Row(spacing: 10, children: [Icon(Icons.priority_high), Text('Urgent')]),
                   ),
                 ],
@@ -167,16 +167,18 @@ class CreateTodo extends HookConsumerWidget {
                 onTap: () async {
                   final date = await showDatePicker(
                     context: context,
-                    firstDate: .now(),
-                    lastDate: .now().add(const Duration(days: 90)),
+                    firstDate: DateTime.now(),
+                    lastDate: DateTime.now().add(const Duration(days: 90)),
                   );
                   if (date == null) return;
                   dueDateController.text = DateFormat.yMMMd().format(date);
                 },
                 decoration: InputDecoration(
-                  border: const OutlineInputBorder(borderRadius: .all(.circular(10))),
+                  border: const OutlineInputBorder(
+                    borderRadius: BorderRadius.all(Radius.circular(10)),
+                  ),
                   errorBorder: const OutlineInputBorder(
-                    borderRadius: .all(.circular(10)),
+                    borderRadius: BorderRadius.all(Radius.circular(10)),
                     borderSide: BorderSide(color: Colors.red),
                   ),
                   errorStyle: const TextStyle(color: Colors.red),
@@ -194,16 +196,16 @@ class CreateTodo extends HookConsumerWidget {
                 onTap: () async {
                   final date = await showDatePicker(
                     context: context,
-                    firstDate: .now(),
-                    lastDate: .now().add(const Duration(days: 90)),
+                    firstDate: DateTime.now(),
+                    lastDate: DateTime.now().add(const Duration(days: 90)),
                   );
                   if (date == null) return;
                   reminderDateController.text = DateFormat.yMMMd().format(date);
                 },
                 decoration: const InputDecoration(
-                  border: OutlineInputBorder(borderRadius: .all(.circular(10))),
+                  border: OutlineInputBorder(borderRadius: BorderRadius.all(Radius.circular(10))),
                   errorBorder: OutlineInputBorder(
-                    borderRadius: .all(.circular(10)),
+                    borderRadius: BorderRadius.all(Radius.circular(10)),
                     borderSide: BorderSide(color: Colors.red),
                   ),
                   errorStyle: TextStyle(color: Colors.red),
@@ -215,32 +217,35 @@ class CreateTodo extends HookConsumerWidget {
                 onTap: () {
                   if (key.currentState!.validate()) {
                     switch (saveAction) {
-                      case .add:
+                      case SaveAction.add:
                         ref
-                            .read(todoProvider.notifier)
+                            .read(todoActionsProvider)
                             .addTodo(
                               title: titleController.text,
                               description: descriptionController.text,
                               category: category,
                               priority: priority,
                               dueDate: DateFormat('yMMMd').parse(dueDateController.text),
+                              reminderDate: reminderDateController.text.isEmpty
+                                  ? null
+                                  : DateFormat('yMMMd').parse(reminderDateController.text),
                             );
                         final snackBar = SnackBar(
                           elevation: 0,
-                          behavior: .floating,
+                          behavior: SnackBarBehavior.floating,
                           backgroundColor: Colors.transparent,
                           content: AwesomeSnackbarContent(
                             title: 'Success',
                             message: 'Todo Added Successfully!',
-                            contentType: .success,
+                            contentType: ContentType.success,
                           ),
                         );
                         ScaffoldMessenger.of(context)
                           ..hideCurrentSnackBar()
                           ..showSnackBar(snackBar);
-                      case .update:
+                      case SaveAction.update:
                         ref
-                            .read(todoProvider.notifier)
+                            .read(todoActionsProvider)
                             .updateTodo(
                               todo!.copyWith(
                                 title: titleController.text,
@@ -248,19 +253,21 @@ class CreateTodo extends HookConsumerWidget {
                                 category: category,
                                 priority: priority,
                                 dueDate: DateFormat('yMMMd').parse(dueDateController.text),
-                                reminderDate: reminderDateController.text.isEmpty
-                                    ? null
-                                    : DateFormat('yMMMd').parse(reminderDateController.text),
+                                reminderDate: Value(
+                                  reminderDateController.text.isEmpty
+                                      ? null
+                                      : DateFormat('yMMMd').parse(reminderDateController.text),
+                                ),
                               ),
                             );
                         final snackBar = SnackBar(
                           elevation: 0,
-                          behavior: .floating,
+                          behavior: SnackBarBehavior.floating,
                           backgroundColor: Colors.transparent,
                           content: AwesomeSnackbarContent(
                             title: 'Update',
                             message: 'Todo Updated Successfully!',
-                            contentType: .success,
+                            contentType: ContentType.success,
                           ),
                         );
                         ScaffoldMessenger.of(context)
@@ -274,10 +281,10 @@ class CreateTodo extends HookConsumerWidget {
                   height: 40,
                   decoration: const BoxDecoration(
                     color: Colors.brown,
-                    borderRadius: .all(.circular(10)),
+                    borderRadius: BorderRadius.all(Radius.circular(10)),
                   ),
                   child: const Row(
-                    mainAxisAlignment: .center,
+                    mainAxisAlignment: MainAxisAlignment.center,
                     spacing: 15,
                     children: [
                       Icon(Icons.save, color: Colors.white),

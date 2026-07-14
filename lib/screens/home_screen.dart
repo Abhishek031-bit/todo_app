@@ -31,8 +31,14 @@ class HomeScreen extends HookWidget {
         onTap: (value) => index.value = value,
         currentIndex: index.value,
         items: [
-          const BottomNavigationBarItem(icon: Icon(Icons.fact_check_outlined), label: 'Todos'),
-          const BottomNavigationBarItem(icon: Icon(Icons.settings), label: 'Settings'),
+          const BottomNavigationBarItem(
+            icon: Icon(Icons.fact_check_outlined),
+            label: 'Todos',
+          ),
+          const BottomNavigationBarItem(
+            icon: Icon(Icons.settings),
+            label: 'Settings',
+          ),
         ],
       ),
     );

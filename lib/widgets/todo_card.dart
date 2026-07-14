@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:intl/intl.dart';
-import 'package:todo_app/models/todo_model.dart';
+import 'package:todo_app/database/app_database.dart';
 import 'package:todo_app/providers/providers.dart';
 import 'package:todo_app/widgets/category_row.dart';
 import 'package:todo_app/widgets/create_todo.dart';
@@ -12,7 +12,7 @@ import 'package:todo_app/widgets/priority_row.dart';
 
 class TodoCard extends HookConsumerWidget {
   const TodoCard({super.key, required this.todo});
-  final TodoModel todo;
+  final Todo todo;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -29,7 +29,7 @@ class TodoCard extends HookConsumerWidget {
           SlidableAction(
             flex: 2,
             onPressed: (context) {
-              ref.read(todoProvider.notifier).deleteTodo(todo.id);
+              ref.read(todoActionsProvider).deleteTodo(todo.id);
               final snackBar = SnackBar(
                 elevation: 0,
                 behavior: .floating,
@@ -58,7 +58,7 @@ class TodoCard extends HookConsumerWidget {
             IconButton(
               onPressed: () {
                 completed.value = !completed.value;
-                ref.read(todoProvider.notifier).updateTodo(todo.copyWith(isDone: completed.value));
+                ref.read(todoActionsProvider).updateTodo(todo.copyWith(isDone: completed.value));
               },
               icon: Icon(completed.value ? Icons.circle : Icons.circle_outlined),
             ),

@@ -13,9 +13,9 @@ class TodoList extends HookConsumerWidget {
         SizedBox(
           height: MediaQuery.sizeOf(context).height * .2,
           child: const Row(
-            mainAxisAlignment: .spaceBetween,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text('Todos', style: TextStyle(fontSize: 30, fontWeight: .bold)),
+              Text('Todos', style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold)),
               FilterButton(),
             ],
           ),
@@ -23,16 +23,22 @@ class TodoList extends HookConsumerWidget {
         Expanded(
           child: Consumer(
             builder: (context, ref, child) {
-              final todos = ref.watch(todosProvider);
-              if (todos.isEmpty) {
-                return const Center(child: Text('No todos. Add some'));
-              }
-              return ListView.builder(
-                itemCount: todos.length,
-                itemBuilder: (context, index) {
-                  final todo = todos[index];
-                  return TodoCard(todo: todo);
+              final todosAsync = ref.watch(filteredTodosProvider);
+              return todosAsync.when(
+                data: (todos) {
+                  if (todos.isEmpty) {
+                    return const Center(child: Text('No todos. Add some'));
+                  }
+                  return ListView.builder(
+                    itemCount: todos.length,
+                    itemBuilder: (context, index) {
+                      final todo = todos[index];
+                      return TodoCard(todo: todo);
+                    },
+                  );
                 },
+                loading: () => const Center(child: CircularProgressIndicator()),
+                error: (err, stack) => Center(child: Text('Error: $err')),
               );
             },
           ),

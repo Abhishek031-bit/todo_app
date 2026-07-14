@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'todos_provider.dart';
+part of 'todo_dao_provider.dart';
 
 // **************************************************************************
 // RiverpodGenerator
@@ -9,44 +9,43 @@ part of 'todos_provider.dart';
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // ignore_for_file: type=lint, type=warning
 
-@ProviderFor(todos)
-final todosProvider = TodosProvider._();
+@ProviderFor(todoDao)
+final todoDaoProvider = TodoDaoProvider._();
 
-final class TodosProvider
-    extends
-        $FunctionalProvider<List<TodoModel>, List<TodoModel>, List<TodoModel>>
-    with $Provider<List<TodoModel>> {
-  TodosProvider._()
+final class TodoDaoProvider
+    extends $FunctionalProvider<TodoDao, TodoDao, TodoDao>
+    with $Provider<TodoDao> {
+  TodoDaoProvider._()
     : super(
         from: null,
         argument: null,
         retry: null,
-        name: r'todosProvider',
+        name: r'todoDaoProvider',
         isAutoDispose: true,
         dependencies: null,
         $allTransitiveDependencies: null,
       );
 
   @override
-  String debugGetCreateSourceHash() => _$todosHash();
+  String debugGetCreateSourceHash() => _$todoDaoHash();
 
   @$internal
   @override
-  $ProviderElement<List<TodoModel>> $createElement($ProviderPointer pointer) =>
+  $ProviderElement<TodoDao> $createElement($ProviderPointer pointer) =>
       $ProviderElement(pointer);
 
   @override
-  List<TodoModel> create(Ref ref) {
-    return todos(ref);
+  TodoDao create(Ref ref) {
+    return todoDao(ref);
   }
 
   /// {@macro riverpod.override_with_value}
-  Override overrideWithValue(List<TodoModel> value) {
+  Override overrideWithValue(TodoDao value) {
     return $ProviderOverride(
       origin: this,
-      providerOverride: $SyncValueProvider<List<TodoModel>>(value),
+      providerOverride: $SyncValueProvider<TodoDao>(value),
     );
   }
 }
 
-String _$todosHash() => r'6d16ae8b6f9d8fa4c475b9984956a3d51357d4c8';
+String _$todoDaoHash() => r'9e46131d35dc972e7211ad2fe9cb6d94274a7fd4';

@@ -3,10 +3,12 @@
 
 
 export 'database_provider.dart';
+export 'filtered_todos_provider.dart';
 export 'filter_notifier.dart';
 export 'greeting_provider.dart';
 export 'shared_preference_provider.dart';
 export 'show_completed_todos_notifier.dart';
 export 'theme_notifier.dart';
 export 'todos_provider.dart';
-export 'todo_notifier.dart';
+export 'todo_actions_provider.dart';
+export 'todo_dao_provider.dart';
