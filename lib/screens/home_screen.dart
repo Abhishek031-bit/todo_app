@@ -12,7 +12,10 @@ class HomeScreen extends HookWidget {
   Widget build(BuildContext context) {
     final index = useState(0);
     return Scaffold(
-      body: _pages[index.value],
+      body: ConstrainedBox(
+        constraints: const BoxConstraints(minWidth: 300),
+        child: _pages[index.value],
+      ),
       floatingActionButton: index.value == 0
           ? Tooltip(
               message: 'Create a new Todo',
@@ -31,14 +34,8 @@ class HomeScreen extends HookWidget {
         onTap: (value) => index.value = value,
         currentIndex: index.value,
         items: [
-          const BottomNavigationBarItem(
-            icon: Icon(Icons.fact_check_outlined),
-            label: 'Todos',
-          ),
-          const BottomNavigationBarItem(
-            icon: Icon(Icons.settings),
-            label: 'Settings',
-          ),
+          const BottomNavigationBarItem(icon: Icon(Icons.fact_check_outlined), label: 'Todos'),
+          const BottomNavigationBarItem(icon: Icon(Icons.settings), label: 'Settings'),
         ],
       ),
     );

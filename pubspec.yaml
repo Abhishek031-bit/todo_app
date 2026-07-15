@@ -62,6 +62,7 @@ dev_dependencies:
   riverpod_lint: ^3.1.4
   drift_dev: ^2.34.0
   flutter_launcher_icons: ^0.14.4
+  msix: ^3.18.0
 
 flutter_launcher_icons:
   android: true
@@ -72,6 +73,11 @@ flutter_launcher_icons:
     generate: true
     image_path: "assets/icon.png"
     icon_size: 48
+
+msix_config:
+  display_name: Tasks
+  msix_version: 1.0.0.0
+  capabilities: internetClient, location, microphone, webcam
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
 

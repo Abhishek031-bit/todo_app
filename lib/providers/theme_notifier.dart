@@ -7,7 +7,7 @@ part 'theme_notifier.g.dart';
 
 @riverpod
 class ThemeNotifier extends _$ThemeNotifier {
-  late SharedPreferences _sharedPreferences;
+  late final SharedPreferences _sharedPreferences;
   static const _key = 'theme';
   @override
   ThemeMode build() {

@@ -20,7 +20,7 @@ final class ShowCompletedTodosNotifierProvider
         argument: null,
         retry: null,
         name: r'showCompletedTodosProvider',
-        isAutoDispose: false,
+        isAutoDispose: true,
         dependencies: null,
         $allTransitiveDependencies: null,
       );
@@ -42,7 +42,7 @@ final class ShowCompletedTodosNotifierProvider
 }
 
 String _$showCompletedTodosNotifierHash() =>
-    r'a96c9888c0a1498545c26b53da1c846e76c7212d';
+    r'28cdbeebee422c607b333d5d815514775c4cc377';
 
 abstract class _$ShowCompletedTodosNotifier extends $Notifier<bool> {
   bool build();

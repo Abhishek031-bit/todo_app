@@ -15,22 +15,22 @@ class Header extends StatelessWidget {
       color: Colors.black,
     );
     return Padding(
-      padding: const EdgeInsets.all(10.0),
+      padding: const .all(10.0),
       child: Column(
         spacing: 15,
         children: [
           Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            mainAxisAlignment: .spaceBetween,
             children: [
-              Align(
-                alignment: Alignment.centerLeft,
+              FittedBox(
+                alignment: .centerLeft,
                 child: Consumer(
                   builder: (context, ref, child) {
                     final greeting = ref.watch(greetingProvider);
                     return greeting.when(
                       data: (data) => Text(
                         'Hello, $data 👋',
-                        style: const TextStyle(fontSize: 35, fontWeight: FontWeight.bold),
+                        style: const TextStyle(fontSize: 35, fontWeight: .bold),
                       ),
                       error: (error, stackTrace) => const Text('Hello'),
                       loading: () => const Text('Hello'),
@@ -41,8 +41,7 @@ class Header extends StatelessWidget {
               Consumer(
                 builder: (context, ref, child) {
                   final filter = ref.watch(filterProvider);
-                  if (filter.categories.isNotEmpty ||
-                      filter.priorities.isNotEmpty) {
+                  if (filter.categories.isNotEmpty || filter.priorities.isNotEmpty) {
                     return ElevatedButton.icon(
                       onPressed: ref.read(filterProvider.notifier).clearFilters,
                       label: const Text('Clear Filters'),
@@ -56,10 +55,7 @@ class Header extends StatelessWidget {
           ),
           Container(
             padding: const EdgeInsets.all(10),
-            decoration: BoxDecoration(
-              border: Border.all(width: 1.5),
-              borderRadius: BorderRadius.circular(10),
-            ),
+            decoration: BoxDecoration(border: .all(width: 1.5), borderRadius: .circular(10)),
             child: Consumer(
               builder: (context, ref, child) {
                 final todosAsync = ref.watch(todosProvider);
@@ -72,7 +68,7 @@ class Header extends StatelessWidget {
                         .where((todo) => todo.dueDate.isBefore(DateTime.now()))
                         .length;
                     return Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      mainAxisAlignment: .spaceEvenly,
                       children: [
                         TodoStat(
                           icon: Icons.account_box,
@@ -104,12 +100,8 @@ class Header extends StatelessWidget {
                       ],
                     );
                   },
-                  loading: () => const Center(
-                    child: CircularProgressIndicator(),
-                  ),
-                  error: (error, stackTrace) => Center(
-                    child: Text('Error: $error'),
-                  ),
+                  loading: () => const Center(child: CircularProgressIndicator()),
+                  error: (error, stackTrace) => Center(child: Text('Error: $error')),
                 );
               },
             ),
