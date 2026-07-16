@@ -20,6 +20,7 @@ class HomeScreen extends HookWidget {
           ? Tooltip(
               message: 'Create a new Todo',
               child: FloatingActionButton(
+                shape: const CircleBorder(),
                 onPressed: () {
                   Navigator.push(
                     context,

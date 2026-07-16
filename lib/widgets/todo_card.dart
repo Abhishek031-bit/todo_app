@@ -1,12 +1,12 @@
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:todo_app/database/database.dart';
 import 'package:todo_app/providers/providers.dart';
 import 'package:todo_app/widgets/widgets.dart';
-import 'package:flutter_slidable/flutter_slidable.dart';
 
 class TodoCard extends HookConsumerWidget {
   const TodoCard({super.key, required this.todo});
@@ -18,6 +18,7 @@ class TodoCard extends HookConsumerWidget {
     if (!show && todo.isDone) return const SizedBox.shrink();
     final completed = useState(todo.isDone);
     final TextDecoration decoration = completed.value ? .lineThrough : .none;
+    final FontStyle fontStyle = completed.value ? .italic : .normal;
     final key = useMemoized(() => ValueKey(todo.id));
     return Slidable(
       key: key,
@@ -68,11 +69,21 @@ class TodoCard extends HookConsumerWidget {
                 children: [
                   Text(
                     todo.title,
-                    style: TextStyle(fontSize: 18, fontWeight: .w700, decoration: decoration),
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: .w700,
+                      decoration: decoration,
+                      fontStyle: fontStyle,
+                    ),
                   ),
                   Text(
                     todo.description,
-                    style: TextStyle(fontSize: 16, fontWeight: .w500, decoration: decoration),
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: .w500,
+                      decoration: decoration,
+                      fontStyle: fontStyle,
+                    ),
                   ),
                   Row(
                     spacing: 3,
@@ -82,6 +93,7 @@ class TodoCard extends HookConsumerWidget {
                       PriorityRow(priority: todo.priority),
                       const SizedBox(width: 7),
                       const Icon(Icons.date_range_rounded),
+                      const SizedBox(width: 7),
                       Text(DateFormat.yMMMd().format(todo.dueDate)),
                     ],
                   ),

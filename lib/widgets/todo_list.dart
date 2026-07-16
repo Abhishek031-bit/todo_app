@@ -13,7 +13,7 @@ class TodoList extends HookConsumerWidget {
         SizedBox(
           height: MediaQuery.sizeOf(context).height * .2,
           child: const Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            mainAxisAlignment: .spaceBetween,
             children: [
               Text('Todos', style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold)),
               FilterButton(),
