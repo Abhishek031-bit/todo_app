@@ -1,7 +1,6 @@
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
-import 'providers.dart';
+import 'package:todo_app/providers/providers.dart';
 
 part 'show_completed_todos_notifier.g.dart';
 
@@ -15,8 +14,8 @@ class ShowCompletedTodosNotifier extends _$ShowCompletedTodosNotifier {
     return _sharedPreferences.getBool(_key) ?? true;
   }
 
-  void toggle() {
+  Future<void> toggle() async {
     state = !state;
-    _sharedPreferences.setBool(_key, state);
+    await _sharedPreferences.setBool(_key, state);
   }
 }

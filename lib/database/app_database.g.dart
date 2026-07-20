@@ -37,9 +37,9 @@ class $TodosTable extends Todos with TableInfo<$TodosTable, Todo> {
   late final GeneratedColumn<String> description = GeneratedColumn<String>(
     'description',
     aliasedName,
-    false,
+    true,
     type: DriftSqlType.string,
-    requiredDuringInsert: true,
+    requiredDuringInsert: false,
   );
   static const VerificationMeta _isDoneMeta = const VerificationMeta('isDone');
   @override
@@ -79,9 +79,9 @@ class $TodosTable extends Todos with TableInfo<$TodosTable, Todo> {
   late final GeneratedColumn<DateTime> dueDate = GeneratedColumn<DateTime>(
     'due_date',
     aliasedName,
-    false,
+    true,
     type: DriftSqlType.dateTime,
-    requiredDuringInsert: true,
+    requiredDuringInsert: false,
   );
   static const VerificationMeta _reminderDateMeta = const VerificationMeta(
     'reminderDate',
@@ -136,8 +136,6 @@ class $TodosTable extends Todos with TableInfo<$TodosTable, Todo> {
           _descriptionMeta,
         ),
       );
-    } else if (isInserting) {
-      context.missing(_descriptionMeta);
     }
     if (data.containsKey('is_done')) {
       context.handle(
@@ -150,8 +148,6 @@ class $TodosTable extends Todos with TableInfo<$TodosTable, Todo> {
         _dueDateMeta,
         dueDate.isAcceptableOrUnknown(data['due_date']!, _dueDateMeta),
       );
-    } else if (isInserting) {
-      context.missing(_dueDateMeta);
     }
     if (data.containsKey('reminder_date')) {
       context.handle(
@@ -182,7 +178,7 @@ class $TodosTable extends Todos with TableInfo<$TodosTable, Todo> {
       description: attachedDatabase.typeMapping.read(
         DriftSqlType.string,
         data['${effectivePrefix}description'],
-      )!,
+      ),
       isDone: attachedDatabase.typeMapping.read(
         DriftSqlType.bool,
         data['${effectivePrefix}is_done'],
@@ -202,7 +198,7 @@ class $TodosTable extends Todos with TableInfo<$TodosTable, Todo> {
       dueDate: attachedDatabase.typeMapping.read(
         DriftSqlType.dateTime,
         data['${effectivePrefix}due_date'],
-      )!,
+      ),
       reminderDate: attachedDatabase.typeMapping.read(
         DriftSqlType.dateTime,
         data['${effectivePrefix}reminder_date'],
@@ -224,20 +220,20 @@ class $TodosTable extends Todos with TableInfo<$TodosTable, Todo> {
 class Todo extends DataClass implements Insertable<Todo> {
   final int id;
   final String title;
-  final String description;
+  final String? description;
   final bool isDone;
   final Category category;
   final Priority priority;
-  final DateTime dueDate;
+  final DateTime? dueDate;
   final DateTime? reminderDate;
   const Todo({
     required this.id,
     required this.title,
-    required this.description,
+    this.description,
     required this.isDone,
     required this.category,
     required this.priority,
-    required this.dueDate,
+    this.dueDate,
     this.reminderDate,
   });
   @override
@@ -245,7 +241,9 @@ class Todo extends DataClass implements Insertable<Todo> {
     final map = <String, Expression>{};
     map['id'] = Variable<int>(id);
     map['title'] = Variable<String>(title);
-    map['description'] = Variable<String>(description);
+    if (!nullToAbsent || description != null) {
+      map['description'] = Variable<String>(description);
+    }
     map['is_done'] = Variable<bool>(isDone);
     {
       map['category'] = Variable<int>(
@@ -257,7 +255,9 @@ class Todo extends DataClass implements Insertable<Todo> {
         $TodosTable.$converterpriority.toSql(priority),
       );
     }
-    map['due_date'] = Variable<DateTime>(dueDate);
+    if (!nullToAbsent || dueDate != null) {
+      map['due_date'] = Variable<DateTime>(dueDate);
+    }
     if (!nullToAbsent || reminderDate != null) {
       map['reminder_date'] = Variable<DateTime>(reminderDate);
     }
@@ -268,11 +268,15 @@ class Todo extends DataClass implements Insertable<Todo> {
     return TodosCompanion(
       id: Value(id),
       title: Value(title),
-      description: Value(description),
+      description: description == null && nullToAbsent
+          ? const Value.absent()
+          : Value(description),
       isDone: Value(isDone),
       category: Value(category),
       priority: Value(priority),
-      dueDate: Value(dueDate),
+      dueDate: dueDate == null && nullToAbsent
+          ? const Value.absent()
+          : Value(dueDate),
       reminderDate: reminderDate == null && nullToAbsent
           ? const Value.absent()
           : Value(reminderDate),
@@ -287,7 +291,7 @@ class Todo extends DataClass implements Insertable<Todo> {
     return Todo(
       id: serializer.fromJson<int>(json['id']),
       title: serializer.fromJson<String>(json['title']),
-      description: serializer.fromJson<String>(json['description']),
+      description: serializer.fromJson<String?>(json['description']),
       isDone: serializer.fromJson<bool>(json['isDone']),
       category: $TodosTable.$convertercategory.fromJson(
         serializer.fromJson<int>(json['category']),
@@ -295,7 +299,7 @@ class Todo extends DataClass implements Insertable<Todo> {
       priority: $TodosTable.$converterpriority.fromJson(
         serializer.fromJson<int>(json['priority']),
       ),
-      dueDate: serializer.fromJson<DateTime>(json['dueDate']),
+      dueDate: serializer.fromJson<DateTime?>(json['dueDate']),
       reminderDate: serializer.fromJson<DateTime?>(json['reminderDate']),
     );
   }
@@ -305,7 +309,7 @@ class Todo extends DataClass implements Insertable<Todo> {
     return <String, dynamic>{
       'id': serializer.toJson<int>(id),
       'title': serializer.toJson<String>(title),
-      'description': serializer.toJson<String>(description),
+      'description': serializer.toJson<String?>(description),
       'isDone': serializer.toJson<bool>(isDone),
       'category': serializer.toJson<int>(
         $TodosTable.$convertercategory.toJson(category),
@@ -313,7 +317,7 @@ class Todo extends DataClass implements Insertable<Todo> {
       'priority': serializer.toJson<int>(
         $TodosTable.$converterpriority.toJson(priority),
       ),
-      'dueDate': serializer.toJson<DateTime>(dueDate),
+      'dueDate': serializer.toJson<DateTime?>(dueDate),
       'reminderDate': serializer.toJson<DateTime?>(reminderDate),
     };
   }
@@ -321,20 +325,20 @@ class Todo extends DataClass implements Insertable<Todo> {
   Todo copyWith({
     int? id,
     String? title,
-    String? description,
+    Value<String?> description = const Value.absent(),
     bool? isDone,
     Category? category,
     Priority? priority,
-    DateTime? dueDate,
+    Value<DateTime?> dueDate = const Value.absent(),
     Value<DateTime?> reminderDate = const Value.absent(),
   }) => Todo(
     id: id ?? this.id,
     title: title ?? this.title,
-    description: description ?? this.description,
+    description: description.present ? description.value : this.description,
     isDone: isDone ?? this.isDone,
     category: category ?? this.category,
     priority: priority ?? this.priority,
-    dueDate: dueDate ?? this.dueDate,
+    dueDate: dueDate.present ? dueDate.value : this.dueDate,
     reminderDate: reminderDate.present ? reminderDate.value : this.reminderDate,
   );
   Todo copyWithCompanion(TodosCompanion data) {
@@ -397,11 +401,11 @@ class Todo extends DataClass implements Insertable<Todo> {
 class TodosCompanion extends UpdateCompanion<Todo> {
   final Value<int> id;
   final Value<String> title;
-  final Value<String> description;
+  final Value<String?> description;
   final Value<bool> isDone;
   final Value<Category> category;
   final Value<Priority> priority;
-  final Value<DateTime> dueDate;
+  final Value<DateTime?> dueDate;
   final Value<DateTime?> reminderDate;
   const TodosCompanion({
     this.id = const Value.absent(),
@@ -416,17 +420,15 @@ class TodosCompanion extends UpdateCompanion<Todo> {
   TodosCompanion.insert({
     this.id = const Value.absent(),
     required String title,
-    required String description,
+    this.description = const Value.absent(),
     this.isDone = const Value.absent(),
     required Category category,
     required Priority priority,
-    required DateTime dueDate,
+    this.dueDate = const Value.absent(),
     this.reminderDate = const Value.absent(),
   }) : title = Value(title),
-       description = Value(description),
        category = Value(category),
-       priority = Value(priority),
-       dueDate = Value(dueDate);
+       priority = Value(priority);
   static Insertable<Todo> custom({
     Expression<int>? id,
     Expression<String>? title,
@@ -452,11 +454,11 @@ class TodosCompanion extends UpdateCompanion<Todo> {
   TodosCompanion copyWith({
     Value<int>? id,
     Value<String>? title,
-    Value<String>? description,
+    Value<String?>? description,
     Value<bool>? isDone,
     Value<Category>? category,
     Value<Priority>? priority,
-    Value<DateTime>? dueDate,
+    Value<DateTime?>? dueDate,
     Value<DateTime?>? reminderDate,
   }) {
     return TodosCompanion(
@@ -537,22 +539,22 @@ typedef $$TodosTableCreateCompanionBuilder =
     TodosCompanion Function({
       Value<int> id,
       required String title,
-      required String description,
+      Value<String?> description,
       Value<bool> isDone,
       required Category category,
       required Priority priority,
-      required DateTime dueDate,
+      Value<DateTime?> dueDate,
       Value<DateTime?> reminderDate,
     });
 typedef $$TodosTableUpdateCompanionBuilder =
     TodosCompanion Function({
       Value<int> id,
       Value<String> title,
-      Value<String> description,
+      Value<String?> description,
       Value<bool> isDone,
       Value<Category> category,
       Value<Priority> priority,
-      Value<DateTime> dueDate,
+      Value<DateTime?> dueDate,
       Value<DateTime?> reminderDate,
     });
 
@@ -725,11 +727,11 @@ class $$TodosTableTableManager
               ({
                 Value<int> id = const Value.absent(),
                 Value<String> title = const Value.absent(),
-                Value<String> description = const Value.absent(),
+                Value<String?> description = const Value.absent(),
                 Value<bool> isDone = const Value.absent(),
                 Value<Category> category = const Value.absent(),
                 Value<Priority> priority = const Value.absent(),
-                Value<DateTime> dueDate = const Value.absent(),
+                Value<DateTime?> dueDate = const Value.absent(),
                 Value<DateTime?> reminderDate = const Value.absent(),
               }) => TodosCompanion(
                 id: id,
@@ -745,11 +747,11 @@ class $$TodosTableTableManager
               ({
                 Value<int> id = const Value.absent(),
                 required String title,
-                required String description,
+                Value<String?> description = const Value.absent(),
                 Value<bool> isDone = const Value.absent(),
                 required Category category,
                 required Priority priority,
-                required DateTime dueDate,
+                Value<DateTime?> dueDate = const Value.absent(),
                 Value<DateTime?> reminderDate = const Value.absent(),
               }) => TodosCompanion.insert(
                 id: id,

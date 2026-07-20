@@ -2,8 +2,7 @@ import 'package:drift/drift.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:todo_app/database/database.dart';
 import 'package:todo_app/models/enums.dart';
-
-import 'todo_dao_provider.dart';
+import 'package:todo_app/providers/todo_dao_provider.dart';
 
 part 'todo_actions_provider.g.dart';
 
@@ -14,19 +13,19 @@ class TodoActions {
 
   Future<void> addTodo({
     required String title,
-    required String description,
+    String? description,
     required Category category,
     required Priority priority,
-    required DateTime dueDate,
+    DateTime? dueDate,
     DateTime? reminderDate,
   }) {
     return _dao.addTodo(
       TodosCompanion.insert(
         title: title,
-        description: description,
+        description: Value(description),
         category: category,
         priority: priority,
-        dueDate: dueDate,
+        dueDate: Value(dueDate),
         reminderDate: Value(reminderDate),
       ),
     );

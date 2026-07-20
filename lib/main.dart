@@ -6,11 +6,21 @@ import 'package:todo_app/providers/theme_notifier.dart';
 import 'package:todo_app/screens/home_screen.dart';
 import 'package:todo_app/theme/dark_theme.dart';
 import 'package:todo_app/theme/light_theme.dart';
+import 'package:window_manager/window_manager.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   final sharedPreferences = await SharedPreferences.getInstance();
 
+  await windowManager.ensureInitialized();
+
+  const options = WindowOptions(minimumSize: Size(600, 480), center: true);
+
+  await windowManager.waitUntilReadyToShow(options, () async {
+    await windowManager.show();
+    await windowManager.maximize();
+    await windowManager.focus();
+  });
   runApp(
     ProviderScope(
       overrides: [sharedPreferencesProvider.overrideWithValue(sharedPreferences)],

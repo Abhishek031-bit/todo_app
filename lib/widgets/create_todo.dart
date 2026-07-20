@@ -7,6 +7,7 @@ import 'package:todo_app/core/core.dart';
 import 'package:todo_app/database/database.dart';
 import 'package:todo_app/models/enums.dart';
 import 'package:todo_app/providers/providers.dart';
+import 'package:todo_app/widgets/date_controller.dart';
 
 class CreateTodo extends HookConsumerWidget {
   const CreateTodo({super.key, this.todo});
@@ -14,12 +15,12 @@ class CreateTodo extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final titleController = useTextEditingController(text: todo?.title ?? '');
-    final descriptionController = useTextEditingController(text: todo?.description ?? '');
+    final titleController = useTextEditingController(text: todo?.title);
+    final descriptionController = useTextEditingController(text: todo?.description);
     var category = todo?.category ?? .general;
     var priority = todo?.priority ?? .low;
     final dueDateController = useTextEditingController(
-      text: todo?.dueDate == null ? '' : DateFormat('yMMMd').format(todo!.dueDate),
+      text: todo?.dueDate == null ? '' : DateFormat('yMMMd').format(todo!.dueDate!),
     );
     final reminderDateController = useTextEditingController(
       text: todo?.reminderDate == null ? '' : DateFormat('yMMMd').format(todo!.reminderDate!),
@@ -66,12 +67,6 @@ class CreateTodo extends HookConsumerWidget {
               TextFormField(
                 maxLines: 3,
                 controller: descriptionController,
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Description is required';
-                  }
-                  return null;
-                },
                 decoration: const InputDecoration(
                   labelText: 'Description',
                   border: OutlineInputBorder(borderRadius: .all(.circular(10))),
@@ -154,62 +149,8 @@ class CreateTodo extends HookConsumerWidget {
                   priority = v!;
                 },
               ),
-              TextFormField(
-                readOnly: true,
-                controller: dueDateController,
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Due Date is required';
-                  }
-                  return null;
-                },
-                onTap: () async {
-                  final date = await showDatePicker(
-                    context: context,
-                    firstDate: .now(),
-                    lastDate: .now().add(const Duration(days: 90)),
-                  );
-                  if (date == null) return;
-                  dueDateController.text = DateFormat.yMMMd().format(date);
-                },
-                decoration: InputDecoration(
-                  border: const OutlineInputBorder(borderRadius: .all(.circular(10))),
-                  errorBorder: const OutlineInputBorder(
-                    borderRadius: .all(.circular(10)),
-                    borderSide: BorderSide(color: Colors.red),
-                  ),
-                  errorStyle: const TextStyle(color: Colors.red),
-                  prefixIcon: const Icon(Icons.calendar_month),
-                  suffixIcon: IconButton(
-                    icon: const Icon(Icons.close),
-                    onPressed: dueDateController.clear,
-                  ),
-                  labelText: 'Due Date',
-                ),
-              ),
-              TextFormField(
-                readOnly: true,
-                controller: reminderDateController,
-                onTap: () async {
-                  final date = await showDatePicker(
-                    context: context,
-                    firstDate: .now(),
-                    lastDate: .now().add(const Duration(days: 90)),
-                  );
-                  if (date == null) return;
-                  reminderDateController.text = DateFormat.yMMMd().format(date);
-                },
-                decoration: const InputDecoration(
-                  border: OutlineInputBorder(borderRadius: .all(.circular(10))),
-                  errorBorder: OutlineInputBorder(
-                    borderRadius: .all(.circular(10)),
-                    borderSide: BorderSide(color: Colors.red),
-                  ),
-                  errorStyle: TextStyle(color: Colors.red),
-                  prefixIcon: Icon(Icons.alarm),
-                  labelText: 'Reminder Date',
-                ),
-              ),
+              DateController(controller: dueDateController),
+              DateController(controller: reminderDateController, labelText: 'Reminder Date'),
               GestureDetector(
                 onTap: () async {
                   if (key.currentState!.validate()) {
@@ -218,10 +159,14 @@ class CreateTodo extends HookConsumerWidget {
                           .read(todoActionsProvider)
                           .addTodo(
                             title: titleController.text,
-                            description: descriptionController.text,
+                            description: descriptionController.text.isEmpty
+                                ? null
+                                : descriptionController.text,
                             category: category,
                             priority: priority,
-                            dueDate: DateFormat('yMMMd').parse(dueDateController.text),
+                            dueDate: dueDateController.text.isEmpty
+                                ? null
+                                : DateFormat('yMMMd').parse(dueDateController.text),
                             reminderDate: reminderDateController.text.isEmpty
                                 ? null
                                 : DateFormat('yMMMd').parse(reminderDateController.text),
@@ -240,10 +185,18 @@ class CreateTodo extends HookConsumerWidget {
                           .updateTodo(
                             todo!.copyWith(
                               title: titleController.text,
-                              description: descriptionController.text,
+                              description: Value(
+                                descriptionController.text.isEmpty
+                                    ? null
+                                    : descriptionController.text,
+                              ),
                               category: category,
                               priority: priority,
-                              dueDate: DateFormat('yMMMd').parse(dueDateController.text),
+                              dueDate: Value(
+                                dueDateController.text.isEmpty
+                                    ? null
+                                    : DateFormat('yMMMd').parse(dueDateController.text),
+                              ),
                               reminderDate: Value(
                                 reminderDateController.text.isEmpty
                                     ? null

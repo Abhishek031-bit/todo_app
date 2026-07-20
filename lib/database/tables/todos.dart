@@ -6,7 +6,7 @@ class Todos extends Table {
 
   TextColumn get title => text()();
 
-  TextColumn get description => text()();
+  TextColumn get description => text().nullable()();
 
   BoolColumn get isDone => boolean().named('is_done').withDefault(const Constant(false))();
 
@@ -14,7 +14,7 @@ class Todos extends Table {
 
   IntColumn get priority => intEnum<Priority>()();
 
-  DateTimeColumn get dueDate => dateTime().named('due_date')();
+  DateTimeColumn get dueDate => dateTime().named('due_date').nullable()();
 
   DateTimeColumn get reminderDate => dateTime().named('reminder_date').nullable()();
 }

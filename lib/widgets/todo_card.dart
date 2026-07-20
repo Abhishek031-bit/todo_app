@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:intl/intl.dart';
 import 'package:todo_app/core/core.dart';
 import 'package:todo_app/database/database.dart';
 import 'package:todo_app/providers/providers.dart';
@@ -72,25 +71,24 @@ class TodoCard extends HookConsumerWidget {
                       fontStyle: fontStyle,
                     ),
                   ),
-                  Text(
-                    todo.description,
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: .w500,
-                      decoration: decoration,
-                      fontStyle: fontStyle,
+                  if (todo.description != null)
+                    Text(
+                      todo.description!,
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: .w500,
+                        decoration: decoration,
+                        fontStyle: fontStyle,
+                      ),
                     ),
-                  ),
                   Row(
                     spacing: 3,
                     children: [
-                      CategoryRow(category: todo.category),
+                      SizedBox(width: 90, child: CategoryRow(category: todo.category)),
                       const SizedBox(width: 7),
-                      PriorityRow(priority: todo.priority),
+                      SizedBox(width: 90, child: PriorityRow(priority: todo.priority)),
                       const SizedBox(width: 7),
-                      const Icon(Icons.date_range_rounded),
-                      const SizedBox(width: 7),
-                      Text(DateFormat.yMMMd().format(todo.dueDate)),
+                      if (todo.dueDate != null) ShowDueDate(dueDate: todo.dueDate!),
                     ],
                   ),
                 ],

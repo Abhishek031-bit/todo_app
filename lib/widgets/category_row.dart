@@ -11,7 +11,7 @@ class CategoryRow extends StatelessWidget {
     switch (category) {
       case .general:
         return const Row(
-          spacing: 3,
+          spacing: 5,
           children: [
             Icon(Icons.category, color: Colors.brown),
             Text('General', style: TextStyle(color: Colors.brown)),

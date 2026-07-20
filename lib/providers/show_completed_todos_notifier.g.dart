@@ -42,7 +42,7 @@ final class ShowCompletedTodosNotifierProvider
 }
 
 String _$showCompletedTodosNotifierHash() =>
-    r'28cdbeebee422c607b333d5d815514775c4cc377';
+    r'8d3d057c559c703b57eb9fa4faacbd1b92e5fe4a';
 
 abstract class _$ShowCompletedTodosNotifier extends $Notifier<bool> {
   bool build();

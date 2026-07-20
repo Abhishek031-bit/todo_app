@@ -21,7 +21,7 @@ class ThemeNotifier extends _$ThemeNotifier {
   }
 
   Future<void> setTheme(ThemeMode theme) async {
-    await _sharedPreferences.setString(_key, theme.name);
     state = theme;
+    await _sharedPreferences.setString(_key, theme.name);
   }
 }

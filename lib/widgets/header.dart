@@ -24,6 +24,7 @@ class Header extends StatelessWidget {
             mainAxisAlignment: .spaceBetween,
             children: [
               FittedBox(
+                fit: .scaleDown,
                 alignment: .centerLeft,
                 child: Consumer(
                   builder: (context, ref, child) {
@@ -65,9 +66,10 @@ class Header extends StatelessWidget {
                     final total = todos.length;
                     final completed = todos.where((todo) => todo.isDone).length;
                     final incomplete = total - completed;
-                    final overdue = todos
-                        .where((todo) => todo.dueDate.isBefore(DateTime.now()))
-                        .length;
+                    final overdue = todos.where((todo) {
+                      if (todo.dueDate == null) return false;
+                      return todo.dueDate!.isBefore(.now());
+                    }).length;
                     return Row(
                       mainAxisAlignment: .spaceEvenly,
                       children: [

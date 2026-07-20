@@ -11,7 +11,7 @@ class PriorityRow extends StatelessWidget {
     switch (priority) {
       case .high:
         return const Row(
-          spacing: 3,
+          spacing: 5,
           children: [
             Icon(Icons.arrow_upward_rounded, color: Colors.yellow),
             Text('High', style: TextStyle(color: Colors.yellow)),
