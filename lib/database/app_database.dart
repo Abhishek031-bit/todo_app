@@ -4,7 +4,8 @@ import 'package:drift/drift.dart';
 import 'package:drift/native.dart';
 import 'package:path/path.dart' as path;
 import 'package:path_provider/path_provider.dart';
-import 'package:todo_app/database/database.dart';
+import 'package:todo_app/database/daos/daos.dart';
+import 'package:todo_app/database/tables/tables.dart';
 import 'package:todo_app/models/enums.dart';
 
 part 'app_database.g.dart';

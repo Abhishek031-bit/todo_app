@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
-import 'package:todo_app/screens/screens.dart';
+import 'package:todo_app/screens/settings_screen.dart';
+import 'package:todo_app/screens/todo_screen.dart';
 import 'package:todo_app/widgets/widgets.dart';
 
 class HomeScreen extends HookWidget {
@@ -34,9 +35,9 @@ class HomeScreen extends HookWidget {
       bottomNavigationBar: BottomNavigationBar(
         onTap: (value) => index.value = value,
         currentIndex: index.value,
-        items: [
-          const BottomNavigationBarItem(icon: Icon(Icons.fact_check_outlined), label: 'Todos'),
-          const BottomNavigationBarItem(icon: Icon(Icons.settings), label: 'Settings'),
+        items: const [
+          BottomNavigationBarItem(icon: Icon(Icons.fact_check_outlined), label: 'Todos'),
+          BottomNavigationBarItem(icon: Icon(Icons.settings), label: 'Settings'),
         ],
       ),
     );
