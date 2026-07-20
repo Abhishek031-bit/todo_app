@@ -55,7 +55,7 @@ class Header extends StatelessWidget {
             ],
           ),
           Container(
-            padding: const EdgeInsets.all(10),
+            padding: const .all(10),
             decoration: BoxDecoration(border: .all(width: 1.5), borderRadius: .circular(10)),
             child: Consumer(
               builder: (context, ref, child) {

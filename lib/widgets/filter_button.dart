@@ -19,13 +19,13 @@ class FilterButton extends ConsumerWidget {
               },
               builder: (context) {
                 return Padding(
-                  padding: const EdgeInsets.all(20.0),
+                  padding: const .all(20.0),
                   child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+                    crossAxisAlignment: .start,
                     children: [
                       const Text('Category'),
                       SizedBox(
-                        height: MediaQuery.sizeOf(context).height * 0.2,
+                        height: MediaQuery.heightOf(context) * 0.2,
                         child: Consumer(
                           builder: (context, ref, child) {
                             final filter = ref.watch(filterProvider);
@@ -33,17 +33,14 @@ class FilterButton extends ConsumerWidget {
                               children: [
                                 for (final category in Category.values)
                                   Padding(
-                                    padding: const EdgeInsets.all(12.0),
+                                    padding: const .all(12.0),
                                     child: FilterChip(
                                       label: Text(
-                                        category.name[0].toUpperCase() +
-                                            category.name.substring(1),
+                                        category.name[0].toUpperCase() + category.name.substring(1),
                                       ),
                                       selected: filter.categories.contains(category),
                                       onSelected: (v) {
-                                        ref
-                                            .read(filterProvider.notifier)
-                                            .toggleCategory(category);
+                                        ref.read(filterProvider.notifier).toggleCategory(category);
                                       },
                                     ),
                                   ),
@@ -55,7 +52,7 @@ class FilterButton extends ConsumerWidget {
                       const Divider(),
                       const Text('Priority'),
                       SizedBox(
-                        height: MediaQuery.sizeOf(context).height * 0.2,
+                        height: MediaQuery.heightOf(context) * 0.2,
                         child: Consumer(
                           builder: (context, ref, child) {
                             final filter = ref.watch(filterProvider);
@@ -63,17 +60,14 @@ class FilterButton extends ConsumerWidget {
                               children: [
                                 for (final priority in Priority.values)
                                   Padding(
-                                    padding: const EdgeInsets.all(12.0),
+                                    padding: const .all(12.0),
                                     child: FilterChip(
                                       label: Text(
-                                        priority.name[0].toUpperCase() +
-                                            priority.name.substring(1),
+                                        priority.name[0].toUpperCase() + priority.name.substring(1),
                                       ),
                                       selected: filter.priorities.contains(priority),
                                       onSelected: (v) {
-                                        ref
-                                            .read(filterProvider.notifier)
-                                            .togglePriority(priority);
+                                        ref.read(filterProvider.notifier).togglePriority(priority);
                                       },
                                     ),
                                   ),

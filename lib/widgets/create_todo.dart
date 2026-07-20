@@ -1,16 +1,15 @@
-import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:drift/drift.dart' show Value;
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:intl/intl.dart';
+import 'package:todo_app/core/core.dart';
 import 'package:todo_app/database/database.dart';
 import 'package:todo_app/models/enums.dart';
 import 'package:todo_app/providers/providers.dart';
 
 class CreateTodo extends HookConsumerWidget {
-  const CreateTodo({super.key, this.saveAction = .add, this.todo});
-  final SaveAction saveAction;
+  const CreateTodo({super.key, this.todo});
   final Todo? todo;
 
   @override
@@ -25,7 +24,7 @@ class CreateTodo extends HookConsumerWidget {
     final reminderDateController = useTextEditingController(
       text: todo?.reminderDate == null ? '' : DateFormat('yMMMd').format(todo!.reminderDate!),
     );
-    final key = useMemoized(() => GlobalKey<FormState>());
+    final key = useMemoized(GlobalKey<FormState>.new);
 
     return Scaffold(
       appBar: AppBar(
@@ -89,27 +88,27 @@ class CreateTodo extends HookConsumerWidget {
                   border: OutlineInputBorder(borderRadius: .all(.circular(10))),
                   labelText: 'Category',
                 ),
-                items: [
-                  const DropdownMenuItem(
+                items: const [
+                  DropdownMenuItem(
                     value: .general,
                     child: Row(spacing: 10, children: [Icon(Icons.category), Text('General')]),
                   ),
-                  const DropdownMenuItem(
+                  DropdownMenuItem(
                     value: .work,
                     child: Row(spacing: 10, children: [Icon(Icons.work), Text('Work')]),
                   ),
-                  const DropdownMenuItem(
+                  DropdownMenuItem(
                     value: .personal,
                     child: Row(spacing: 10, children: [Icon(Icons.person), Text('Personal')]),
                   ),
-                  const DropdownMenuItem(
+                  DropdownMenuItem(
                     value: .finances,
                     child: Row(
                       spacing: 10,
                       children: [Icon(Icons.monetization_on_outlined), Text('Finances')],
                     ),
                   ),
-                  const DropdownMenuItem(
+                  DropdownMenuItem(
                     value: .health,
                     child: Row(
                       spacing: 10,
@@ -127,26 +126,26 @@ class CreateTodo extends HookConsumerWidget {
                   border: OutlineInputBorder(borderRadius: .all(.circular(10))),
                   labelText: 'Priority',
                 ),
-                items: [
-                  const DropdownMenuItem(
+                items: const [
+                  DropdownMenuItem(
                     value: .low,
                     child: Row(
                       spacing: 10,
                       children: [Icon(Icons.arrow_downward_rounded), Text('Low')],
                     ),
                   ),
-                  const DropdownMenuItem(
+                  DropdownMenuItem(
                     value: .medium,
                     child: Row(spacing: 10, children: [Icon(Icons.remove), Text('Medium')]),
                   ),
-                  const DropdownMenuItem(
+                  DropdownMenuItem(
                     value: .high,
                     child: Row(
                       spacing: 10,
                       children: [Icon(Icons.arrow_upward_rounded), Text('High')],
                     ),
                   ),
-                  const DropdownMenuItem(
+                  DropdownMenuItem(
                     value: .urgent,
                     child: Row(spacing: 10, children: [Icon(Icons.priority_high), Text('Urgent')]),
                   ),
@@ -212,67 +211,55 @@ class CreateTodo extends HookConsumerWidget {
                 ),
               ),
               GestureDetector(
-                onTap: () {
+                onTap: () async {
                   if (key.currentState!.validate()) {
-                    switch (saveAction) {
-                      case SaveAction.add:
-                        ref
-                            .read(todoActionsProvider)
-                            .addTodo(
+                    if (todo == null) {
+                      await ref
+                          .read(todoActionsProvider)
+                          .addTodo(
+                            title: titleController.text,
+                            description: descriptionController.text,
+                            category: category,
+                            priority: priority,
+                            dueDate: DateFormat('yMMMd').parse(dueDateController.text),
+                            reminderDate: reminderDateController.text.isEmpty
+                                ? null
+                                : DateFormat('yMMMd').parse(reminderDateController.text),
+                          );
+                      if (!context.mounted) return;
+                      showSnackBar(
+                        context: context,
+                        contentType: .success,
+                        title: 'Add',
+                        message: 'Todo Added Successfully!',
+                      );
+                      Navigator.pop(context);
+                    } else {
+                      await ref
+                          .read(todoActionsProvider)
+                          .updateTodo(
+                            todo!.copyWith(
                               title: titleController.text,
                               description: descriptionController.text,
                               category: category,
                               priority: priority,
                               dueDate: DateFormat('yMMMd').parse(dueDateController.text),
-                              reminderDate: reminderDateController.text.isEmpty
-                                  ? null
-                                  : DateFormat('yMMMd').parse(reminderDateController.text),
-                            );
-                        final snackBar = SnackBar(
-                          elevation: 0,
-                          behavior: .floating,
-                          backgroundColor: Colors.transparent,
-                          content: AwesomeSnackbarContent(
-                            title: 'Success',
-                            message: 'Todo Added Successfully!',
-                            contentType: .success,
-                          ),
-                        );
-                        ScaffoldMessenger.of(context)
-                          ..hideCurrentSnackBar()
-                          ..showSnackBar(snackBar);
-                      case SaveAction.update:
-                        ref
-                            .read(todoActionsProvider)
-                            .updateTodo(
-                              todo!.copyWith(
-                                title: titleController.text,
-                                description: descriptionController.text,
-                                category: category,
-                                priority: priority,
-                                dueDate: DateFormat('yMMMd').parse(dueDateController.text),
-                                reminderDate: Value(
-                                  reminderDateController.text.isEmpty
-                                      ? null
-                                      : DateFormat('yMMMd').parse(reminderDateController.text),
-                                ),
+                              reminderDate: Value(
+                                reminderDateController.text.isEmpty
+                                    ? null
+                                    : DateFormat('yMMMd').parse(reminderDateController.text),
                               ),
-                            );
-                        final snackBar = SnackBar(
-                          elevation: 0,
-                          behavior: .floating,
-                          backgroundColor: Colors.transparent,
-                          content: AwesomeSnackbarContent(
-                            title: 'Update',
-                            message: 'Todo Updated Successfully!',
-                            contentType: .success,
-                          ),
-                        );
-                        ScaffoldMessenger.of(context)
-                          ..hideCurrentSnackBar()
-                          ..showSnackBar(snackBar);
+                            ),
+                          );
+                      if (!context.mounted) return;
+                      showSnackBar(
+                        context: context,
+                        contentType: .success,
+                        title: 'Update',
+                        message: 'Todo updated successfully',
+                      );
+                      Navigator.pop(context);
                     }
-                    Navigator.pop(context);
                   }
                 },
                 child: Container(
@@ -287,7 +274,7 @@ class CreateTodo extends HookConsumerWidget {
                     children: [
                       const Icon(Icons.save, color: Colors.white),
                       Text(
-                        saveAction == .add ? 'Save' : 'Update',
+                        todo == null ? 'Save' : 'Update',
                         style: const TextStyle(color: Colors.white, fontSize: 20),
                       ),
                     ],

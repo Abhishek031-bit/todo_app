@@ -13,7 +13,7 @@ class SettingsScreen extends StatelessWidget {
         centerTitle: true,
       ),
       body: Padding(
-        padding: const EdgeInsets.all(20.0),
+        padding: const .all(20.0),
         child: Column(
           spacing: 12,
           crossAxisAlignment: .start,
